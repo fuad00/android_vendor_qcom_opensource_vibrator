@@ -31,6 +31,10 @@ cc_library_shared {
 
 cc_binary {
     name: "vendor.qti.hardware.vibrator.service",
+    enabled: select(soong_config_variable("metroid", "stock_vibrator"), {
+        true: false,
+        default: true,
+    }),
     vendor: true,
     relative_install_path: "hw",
     init_rc: ["vendor.qti.hardware.vibrator.service.rc"],
@@ -38,6 +42,9 @@ cc_binary {
         "vendor.qti.hardware.vibrator.service.xml",
     ],
     cflags: Common_CFlags,
+    // METROID: vendor.qti.hardware.vibrator.impl is overridden by a prebuilt in
+    // vendor/nothing/metroid that lacks export_include_dirs; add the AOSP source header.
+    include_dirs: ["vendor/qcom/opensource/vibrator/aidl/include"],
     srcs: [
         "service.cpp",
     ],
